@@ -1,0 +1,120 @@
+package com.example.appclubtenis.Activitys;
+
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.appclubtenis.Helper.ConfigDAO;
+import com.example.appclubtenis.Helper.ConfigModel;
+import com.example.appclubtenis.Preferences.AppPreferences;
+import com.example.appclubtenis.R;
+
+public class SettingActivity extends AppCompatActivity {
+
+    private EditText urlEditText, usernameEditText, passwordEditText;
+    private Spinner languageSpinner, themeSpinner;
+    private Button saveButton;
+
+    private ConfigDAO configDAO;
+    private AppPreferences appPreferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_setting);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+
+
+        });
+        configDAO = new ConfigDAO(this);
+        appPreferences = new AppPreferences(this);
+
+        urlEditText = findViewById(R.id.editTextUrl);
+        usernameEditText = findViewById(R.id.editTextUsername);
+        passwordEditText = findViewById(R.id.editTextPassword);
+        languageSpinner = findViewById(R.id.spinnerLanguage);
+        themeSpinner = findViewById(R.id.spinnerTheme);
+        saveButton = findViewById(R.id.buttonSaveSettings);
+
+        setupSpinners();
+        loadSettings();
+
+        saveButton.setOnClickListener(v -> saveSettings());
+    }
+
+    private void setupSpinners() {
+        String[] languages = {"es", "en"};
+        ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languages);
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(langAdapter);
+
+        String[] themes = {"light", "dark"};
+        ArrayAdapter<String> themeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, themes);
+        themeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        themeSpinner.setAdapter(themeAdapter);
+    }
+
+    private void loadSettings() {
+        // Cargar desde SQLite
+        ConfigModel config = configDAO.getConfig();
+        if (config != null) {
+            urlEditText.setText(config.getUrl());
+            usernameEditText.setText(config.getUsername());
+         }
+
+        String savedUsername = appPreferences.getUsername();
+        String savedPassword = appPreferences.getPassword();
+
+        if (savedUsername != null && !savedUsername.isEmpty()) {
+            usernameEditText.setText(savedUsername);
+        }
+        if (savedPassword != null && !savedPassword.isEmpty()) {
+            passwordEditText.setText(savedPassword);
+        }
+
+        String language = appPreferences.getLanguage();
+        int langPos = ((ArrayAdapter) languageSpinner.getAdapter()).getPosition(language);
+        languageSpinner.setSelection(langPos >= 0 ? langPos : 0);
+
+        String theme = appPreferences.getTheme();
+        int themePos = ((ArrayAdapter) themeSpinner.getAdapter()).getPosition(theme);
+        themeSpinner.setSelection(themePos >= 0 ? themePos : 0);
+    }
+
+    private void saveSettings() {
+        String url = urlEditText.getText().toString().trim();
+        String username = usernameEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+        String language = languageSpinner.getSelectedItem().toString();
+        String theme = themeSpinner.getSelectedItem().toString();
+
+        if (url.isEmpty()) {
+            Toast.makeText(this, "La URL no puede estar vacía", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+       configDAO.updateConfig(url, username, ""); // dejamos password vacía en SQLite por seguridad
+
+
+        appPreferences.setUsername(username);
+        appPreferences.setPassword(password);
+
+        appPreferences.setLanguage(language);
+        appPreferences.setTheme(theme);
+
+        Toast.makeText(this, "Configuración guardada", Toast.LENGTH_SHORT).show();
+    }
+}

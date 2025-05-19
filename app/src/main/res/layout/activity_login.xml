@@ -3,30 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_marginTop="50dp"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    
-    
-    <EditText
-        android:id="@+id/etnombreUsuario"
-        android:hint="@string/nombre_usuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    tools:context=".Activitys.LoginActivity">
 
     <EditText
-        android:id="@+id/etcontraseña"
+        android:id="@+id/editTextUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/usuario"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="@string/contrase_a"
         android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
-    
+        android:layout_marginTop="12dp" />
+
     <Button
-        android:id="@+id/btnLogin"
-        android:text="@string/login"
+        android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"/>
+        android:text="@string/iniciar_sesi_n"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/buttonConfig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/configuraci_n"
+        android:layout_marginTop="12dp" />
 
 </LinearLayout>

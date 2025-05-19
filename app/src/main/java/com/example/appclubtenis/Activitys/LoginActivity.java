@@ -2,25 +2,23 @@ package com.example.appclubtenis.Activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.appclubtenis.Modelos.Players;
+import com.example.appclubtenis.Helper.ConfigDAO;
+import com.example.appclubtenis.Helper.ConfigModel;
+import com.example.appclubtenis.Model.Players;
+import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
-import com.example.appclubtenis.Requests.LoginRequest;
-import com.example.appclubtenis.SQLite.Helper.PreferencesHelper;
-import com.example.appclubtenis.SQLite.Preferences.AppPreferences;
-import com.example.appclubtenis.Service.ApiPlayersService;
-
-import java.util.Map;
+import com.example.appclubtenis.Service.PlayerService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,8 +28,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etUserName, etPassword;
-    private Button btnLogin;
+    private EditText usernameEditText, passwordEditText;
+    private Button loginButton, configButton;
+    private PlayerService playerService;
+    private ConfigDAO configDAO;
+    private AppPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,60 +45,108 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        appPreferences = new AppPreferences(this);
 
+        if (appPreferences.isDarkMode()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
-        etUserName = findViewById(R.id.etnombreUsuario);
-        etPassword = findViewById(R.id.etcontraseña);
-        btnLogin = findViewById(R.id.btnLogin);
+        setContentView(R.layout.activity_login);
 
+        usernameEditText = findViewById(R.id.editTextUsername);
+        passwordEditText = findViewById(R.id.editTextPassword);
+        loginButton = findViewById(R.id.buttonLogin);
+        configButton = findViewById(R.id.buttonConfig);
+
+        configDAO = new ConfigDAO(this);
+        loadApiService();
+
+        String savedUser = appPreferences.getUsername();
+        String savedPass = appPreferences.getPassword();
+        if(savedUser != null) {
+            usernameEditText.setText(savedUser);
+        }
+        if(savedPass != null) {
+            passwordEditText.setText(savedPass);
+        }
+
+        loginButton.setOnClickListener(v -> loginUser());
+        configButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void loadApiService() {
+        ConfigModel config = configDAO.getConfig();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(config.getUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        ApiPlayersService apiPlayersService = retrofit.create(ApiPlayersService.class);
+        playerService = retrofit.create(PlayerService.class);
+    }
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadApiService();
+    }
+
+    private void loginUser() {
+        String username = usernameEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Introduce userName and password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(username.equals("admin") && password.equals("admin123")) {
+            appPreferences.setUsername(username);
+            appPreferences.setPassword(password);
+            appPreferences.setLoggedIn(true);
+
+            Toast.makeText(this, "Welcome Admin", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        Players player = new Players();
+        player.setUserName(username);
+        player.setPassword(password);
+
+        playerService.login(player).enqueue(new Callback<Players>() {
             @Override
-            public void onClick(View view) {
-                String name = etUserName.getText().toString();
-                String password = etPassword.getText().toString();
+            public void onResponse(Call<Players> call, Response<Players> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Players user = response.body();
+                    Toast.makeText(LoginActivity.this, "Bienvenido " + user.getName(), Toast.LENGTH_SHORT).show();
 
-                LoginRequest loginRequest = new LoginRequest(name, password);
+                    appPreferences.setUsername(username);
+                    appPreferences.setPassword(password);
+                    appPreferences.setLoggedIn(true); // << ESTA LÍNEA
 
-                Call<Map<String, String>> call = apiPlayersService.login(loginRequest);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
 
+                } else {
+                    Toast.makeText(LoginActivity.this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-                call.enqueue(new Callback<Map<String, String>>() {
-                    @Override
-                    public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            String message = response.body().get("message");
-                            String userIdStr = response.body().get("player_id"); // asegúrate de que el backend lo devuelve
-
-
-                            int userId = userIdStr != null ? Integer.parseInt(userIdStr) : 0;
-
-                            PreferencesHelper manager = new PreferencesHelper(LoginActivity.this);
-                            String theme = PreferencesHelper.getCurrentTheme(getApplicationContext());
-                            String language = PreferencesHelper.getCurrentLanguage(getApplicationContext());
-
-                            AppPreferences preferences = new AppPreferences(userId, name, theme, language, password);
-                            manager.savePreferences(preferences);
-
-                            Toast.makeText(LoginActivity.this, "Éxito: " + message, Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Login incorrecto", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Map<String, String>> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, "Error de red: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+            @Override
+            public void onFailure(Call<Players> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

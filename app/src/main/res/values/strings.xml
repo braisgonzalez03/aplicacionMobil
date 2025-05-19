@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">AppClubTenis</string>
-    <string name="nombre_usuario">Nombre Usuario</string>
+    <string name="url_del_servidor">URL del servidor</string>
+    <string name="usuario">Usuario</string>
     <string name="contrase_a">Contraseña</string>
-    <string name="login">Login</string>
+    <string name="guardar_configuraci_n">Guardar configuración</string>
+    <string name="iniciar_sesi_n">Iniciar sesión</string>
+    <string name="configuraci_n">Configuración</string>
+
 </resources>
