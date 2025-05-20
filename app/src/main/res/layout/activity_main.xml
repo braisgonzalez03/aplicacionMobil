@@ -17,31 +17,31 @@
 
     <Button
         android:id="@+id/btnPlayers"
-        android:text="Jugadores"
+        android:text="@string/jugadores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnTournaments"
-        android:text="Torneos"
+        android:text="@string/torneos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnInscriptions"
-        android:text="Inscripciones"
+        android:text="@string/inscripciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnSettings"
-        android:text="Configuración"
+        android:text="@string/configuraci_n"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnLogout"
-        android:text="Cerrar sesión"
+        android:text="@string/cerrar_sesi_n"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

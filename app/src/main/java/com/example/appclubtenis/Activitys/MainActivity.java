@@ -63,9 +63,13 @@ public class MainActivity extends AppCompatActivity {
             });
 
         btnTournaments.setOnClickListener(v -> {
+            Intent tournament = new Intent(this, TournamentActivity.class);
+            startActivity(tournament);
             });
 
         btnInscriptions.setOnClickListener(v -> {
+            Intent inscription = new Intent(this, InscriptionsActivity.class);
+            startActivity(inscription);
              });
 
         btnSettings.setOnClickListener(v -> {

@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_marginTop="50dp"
     android:layout_height="match_parent"
-    tools:context=".Activitys.LoginActivity">
+    android:padding="50dp"
+    android:background="@color/tennis_court_green"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp"
+        />
 
     <EditText
         android:id="@+id/editTextUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/usuario"
-        android:inputType="text" />
+        android:inputType="text"
+        android:background="@drawable/tennis_edittext"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white_hint"
+        android:layout_marginBottom="16dp"
+        />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -22,20 +39,36 @@
         android:layout_height="wrap_content"
         android:hint="@string/contrase_a"
         android:inputType="textPassword"
-        android:layout_marginTop="12dp" />
+        android:background="@drawable/tennis_edittext"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white_hint"
+        android:layout_marginBottom="24dp"
+        />
 
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/iniciar_sesi_n"
-        android:layout_marginTop="20dp" />
+        android:backgroundTint="@color/tennis_yellow"
+        android:textColor="@color/tennis_court_green_button"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/tennis_edittext"
+        />
 
     <Button
         android:id="@+id/buttonConfig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/configuraci_n"
-        android:layout_marginTop="12dp" />
+        android:backgroundTint="@color/white_translucent"
+        android:textColor="@color/tennis_yellow"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:background="@drawable/tennis_edittext"
+        />
 
 </LinearLayout>

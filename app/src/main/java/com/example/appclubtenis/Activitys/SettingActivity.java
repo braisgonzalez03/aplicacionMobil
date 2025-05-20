@@ -1,5 +1,6 @@
 package com.example.appclubtenis.Activitys;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
+import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 
@@ -26,6 +28,13 @@ public class SettingActivity extends AppCompatActivity {
 
     private ConfigDAO configDAO;
     private AppPreferences appPreferences;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        AppPreferences prefs = new AppPreferences(newBase);
+        String language = prefs.getLanguage();
+        super.attachBaseContext(LanguageLocale.setLocale(newBase, language));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +65,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        String[] languages = {"es", "en"};
+        String[] languages = {"en", "es"};
         ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languages);
         langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         languageSpinner.setAdapter(langAdapter);
@@ -116,5 +125,6 @@ public class SettingActivity extends AppCompatActivity {
         appPreferences.setTheme(theme);
 
         Toast.makeText(this, "Configuración guardada", Toast.LENGTH_SHORT).show();
+        recreate();
     }
 }

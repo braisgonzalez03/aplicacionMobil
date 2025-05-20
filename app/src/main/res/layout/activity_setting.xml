@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activitys.SettingActivity">
+    android:background="@color/tennis_court_green"
+    android:padding="24dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,9 +13,11 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="URL del servidor"
+            android:text="@string/url_del_servidor"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_marginBottom="4dp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -24,13 +25,20 @@
             android:id="@+id/editTextUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textUri" />
+            android:inputType="textUri"
+            android:background="@drawable/tennis_edittext"
+            android:padding="12dp"
+            android:hint="@string/url_del_servidor"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_hint" />
 
         <TextView
-            android:text="Usuario"
+            android:text="@string/usuario"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -38,13 +46,20 @@
             android:id="@+id/editTextUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
+            android:hint="@string/usuario"
+            android:inputType="textPersonName"
+            android:background="@drawable/tennis_edittext"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_hint" />
 
         <TextView
-            android:text="Contraseña"
+            android:text="@string/contrase_a"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -52,40 +67,58 @@
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:hint="@string/contrase_a"
+            android:inputType="textPassword"
+            android:background="@drawable/tennis_edittext"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_hint" />
 
         <TextView
-            android:text="Idioma"
+            android:text="@string/idioma"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Spinner
             android:id="@+id/spinnerLanguage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/tennis_spinner"
+            android:padding="8dp" />
 
         <TextView
-            android:text="Tema"
+            android:text="@string/tema"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Spinner
             android:id="@+id/spinnerTheme"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/tennis_spinner"
+            android:padding="8dp" />
 
         <Button
             android:id="@+id/buttonSaveSettings"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:text="Guardar configuración"
-            android:layout_marginTop="30dp" />
+            android:text="@string/guardar_configuraci_n"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/tennis_court_black"
+            android:textStyle="bold"
+            android:background="@drawable/tennis_button"
+            android:padding="12dp" />
 
     </LinearLayout>
 

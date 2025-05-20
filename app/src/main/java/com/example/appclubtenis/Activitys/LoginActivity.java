@@ -1,5 +1,6 @@
 package com.example.appclubtenis.Activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
+import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Model.Players;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
@@ -33,6 +35,13 @@ public class LoginActivity extends AppCompatActivity {
     private PlayerService playerService;
     private ConfigDAO configDAO;
     private AppPreferences appPreferences;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        AppPreferences prefs = new AppPreferences(newBase);
+        String language = prefs.getLanguage();
+        super.attachBaseContext(LanguageLocale.setLocale(newBase, language));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

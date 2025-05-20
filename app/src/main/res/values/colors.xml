@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="tennis_court_green">#2C6E49</color>
+    <color name="tennis_court_black">#000000</color>
+    <color name="tennis_court_green_button">#8AE0B1</color>
+    <color name="tennis_yellow">#FFEB3B</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_hint">#BBFFFFFF</color>
+    <color name="white_translucent">#33FFFFFF</color>
 </resources>

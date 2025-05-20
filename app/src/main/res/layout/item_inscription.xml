@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:showDividers="middle">
+
+    <TextView
+        android:id="@+id/textInscriptionId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/id_inscripci_n"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textNamePlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/id_jugador"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"/>
+
+    <TextView
+        android:id="@+id/textNameTournament"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/id_torneo"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/textStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fecha_inicio"
+            android:textSize="14sp"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/textEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textStartDate"
+            android:layout_marginStart="60dp"
+            android:text="@string/fecha_fin"
+            android:textSize="14sp"
+            android:textStyle="bold|italic"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -18,7 +18,6 @@ public class ConfigDAO {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_URL, url);
         values.put(DBHelper.COLUMN_USERNAME, username);
-        values.put(DBHelper.COLUMN_PASSWORD, password);
         db.update(DBHelper.TABLE_CONFIG, values, DBHelper.COLUMN_ID + " = ?", new String[]{"1"});
     }
 
@@ -29,7 +28,6 @@ public class ConfigDAO {
         if (cursor.moveToFirst()) {
             config.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_URL)));
             config.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USERNAME)));
-            config.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PASSWORD)));
         }
         cursor.close();
         return config;

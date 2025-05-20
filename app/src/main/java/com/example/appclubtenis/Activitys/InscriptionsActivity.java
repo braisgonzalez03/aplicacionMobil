@@ -11,14 +11,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.appclubtenis.Adapter.PlayersAdapter;
+import com.example.appclubtenis.Adapter.InscriptionAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
 import com.example.appclubtenis.Helper.LanguageLocale;
-import com.example.appclubtenis.Model.Players;
+import com.example.appclubtenis.Model.Inscriptions;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
-import com.example.appclubtenis.Service.PlayerService;
+import com.example.appclubtenis.Service.InscriptionService;
 
 import java.util.List;
 
@@ -28,10 +28,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PlayersActivity extends AppCompatActivity {
+public class InscriptionsActivity extends AppCompatActivity {
 
-    private ListView listViewPlayers;
-    private PlayerService playerService;
+    private ListView listViewInscriptions;
+    private InscriptionService inscriptionService;
     private ConfigDAO configDAO;
 
     @Override
@@ -45,17 +45,19 @@ public class PlayersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_players);
+        setContentView(R.layout.activity_inscriptions);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        listViewPlayers = findViewById(R.id.listViewPlayers);
+
+        listViewInscriptions = findViewById(R.id.listViewInscriptions);
         configDAO = new ConfigDAO(this);
+
         loadApiService();
-        fetchPlayers();
+        fetchInscriptions();
     }
 
     private void loadApiService() {
@@ -65,25 +67,25 @@ public class PlayersActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        playerService = retrofit.create(PlayerService.class);
+        inscriptionService = retrofit.create(InscriptionService.class);
     }
 
-    private void fetchPlayers() {
-        playerService.getAllPlayers().enqueue(new Callback<List<Players>>() {
+    private void fetchInscriptions() {
+        inscriptionService.getAllInscriptions().enqueue(new Callback<List<Inscriptions>>() {
             @Override
-            public void onResponse(Call<List<Players>> call, Response<List<Players>> response) {
+            public void onResponse(Call<List<Inscriptions>> call, Response<List<Inscriptions>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Players> playersList = response.body();
-                    PlayersAdapter adapter = new PlayersAdapter(PlayersActivity.this, playersList);
-                    listViewPlayers.setAdapter(adapter);
+                    List<Inscriptions> inscriptions = response.body();
+                    InscriptionAdapter adapter = new InscriptionAdapter(InscriptionsActivity.this, inscriptions);
+                    listViewInscriptions.setAdapter(adapter);
                 } else {
-                    Toast.makeText(PlayersActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InscriptionsActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Players>> call, Throwable t) {
-                Toast.makeText(PlayersActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<Inscriptions>> call, Throwable t) {
+                Toast.makeText(InscriptionsActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }

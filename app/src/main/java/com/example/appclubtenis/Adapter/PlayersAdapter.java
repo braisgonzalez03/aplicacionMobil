@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.appclubtenis.Model.Players;
 import com.example.appclubtenis.R;
 
@@ -15,12 +18,12 @@ import java.util.List;
 public class PlayersAdapter extends BaseAdapter {
 
 
-    private final List<Players> playersList;
-    private final LayoutInflater inflater;
+    private List<Players> playersList;
+    private Context context;
 
     public PlayersAdapter(Context context, List<Players> playersList) {
         this.playersList = playersList;
-        this.inflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     @Override
@@ -38,29 +41,16 @@ public class PlayersAdapter extends BaseAdapter {
         return position;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(int position, @Nullable View convertView, @NonNull  ViewGroup parent) {
+        LayoutInflater mostrado = LayoutInflater.from(context);
+        View elemento = mostrado.inflate(R.layout.item_player,parent,false);
+        TextView texto1 = elemento.findViewById(R.id.textPlayerName);
+        texto1.setText(((Players)getItem(position)).getName());
+        TextView texto2 = elemento.findViewById(R.id.textPlayerUser);
+        texto2.setText(((Players)getItem(position)).getUserName());
 
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_player, parent, false);
-            holder = new ViewHolder();
-            holder.textName = convertView.findViewById(R.id.textPlayerName);
-            holder.textUser = convertView.findViewById(R.id.textPlayerUser);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        Players player = playersList.get(position);
-        holder.textName.setText(player.getName());
-        holder.textUser.setText(player.getUserName());
-
-        return convertView;
-    }
-
-    static class ViewHolder {
-        TextView textName;
-        TextView textUser;
+        return elemento;
     }
 }
