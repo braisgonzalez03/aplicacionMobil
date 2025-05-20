@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="50dp"
-    android:background="@color/tennis_court_green"
     >
 
     <TextView
@@ -15,7 +14,7 @@
         android:text="@string/app_name"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/tennis_court_black"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="32dp"
         />

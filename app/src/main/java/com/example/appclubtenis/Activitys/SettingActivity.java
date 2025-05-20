@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private EditText urlEditText, usernameEditText, passwordEditText;
     private Spinner languageSpinner, themeSpinner;
-    private Button saveButton;
+    private ImageButton saveButton;
 
     private ConfigDAO configDAO;
     private AppPreferences appPreferences;
