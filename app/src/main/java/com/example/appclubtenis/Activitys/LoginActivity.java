@@ -116,6 +116,8 @@ public class LoginActivity extends AppCompatActivity {
             appPreferences.setUsername(username);
             appPreferences.setPassword(password);
             appPreferences.setLoggedIn(true);
+            appPreferences.setIsAdmin(true);
+            appPreferences.setPlayerId(-1);
 
             Toast.makeText(this, "Welcome Admin", Toast.LENGTH_SHORT).show();
 
@@ -134,13 +136,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Players> call, Response<Players> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Players user = response.body();
-                    Toast.makeText(LoginActivity.this, "Bienvenido " + user.getName(), Toast.LENGTH_SHORT).show();
+                    Players player = response.body();
+                    Toast.makeText(LoginActivity.this, "Bienvenido " + player.getName(), Toast.LENGTH_SHORT).show();
 
                     appPreferences.setUsername(username);
                     appPreferences.setPassword(password);
-                    appPreferences.setLoggedIn(true); // << ESTA LÍNEA
-
+                    appPreferences.setLoggedIn(true);
+                    appPreferences.setIsAdmin(false);
+                    appPreferences.setPlayerId(player.getPlayerId());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

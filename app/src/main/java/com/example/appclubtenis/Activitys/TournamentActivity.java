@@ -57,7 +57,15 @@ public class TournamentActivity extends AppCompatActivity {
         configDAO = new ConfigDAO(this);
 
         loadApiService();
-        fetchTournaments();
+
+        AppPreferences prefs = new AppPreferences(this);
+        int playerId = prefs.getPlayerId();
+        if (prefs.isAdmin()) {
+            fetchTournaments();
+        } else {
+            fetchTournamentsForPlayer(playerId);
+        }
+
     }
 
     private void loadApiService() {
@@ -71,7 +79,30 @@ public class TournamentActivity extends AppCompatActivity {
     }
 
     private void fetchTournaments() {
-        tournamentService.getAllTournaments().enqueue(new Callback<List<Tournaments>>() {
+        AppPreferences preferences = new AppPreferences(this);
+        if (preferences.isAdmin()) {
+            tournamentService.getAllTournaments().enqueue(new Callback<List<Tournaments>>() {
+                @Override
+                public void onResponse(Call<List<Tournaments>> call, Response<List<Tournaments>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<Tournaments> tournaments = response.body();
+                        TournamentAdapter adapter = new TournamentAdapter(TournamentActivity.this, tournaments);
+                        listViewTournaments.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(TournamentActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Tournaments>> call, Throwable t) {
+                    Toast.makeText(TournamentActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+    }
+    private void fetchTournamentsForPlayer(int playerId) {
+        tournamentService.getTournamentsByPlayer(playerId).enqueue(new Callback<List<Tournaments>>() {
             @Override
             public void onResponse(Call<List<Tournaments>> call, Response<List<Tournaments>> response) {
                 if (response.isSuccessful() && response.body() != null) {

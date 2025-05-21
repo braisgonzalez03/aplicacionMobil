@@ -12,10 +12,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.appclubtenis.Adapter.InscriptionAdapter;
+import com.example.appclubtenis.Adapter.TournamentAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
 import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Model.Inscriptions;
+import com.example.appclubtenis.Model.Tournaments;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.InscriptionService;
@@ -57,7 +59,15 @@ public class InscriptionsActivity extends AppCompatActivity {
         configDAO = new ConfigDAO(this);
 
         loadApiService();
-        fetchInscriptions();
+
+        AppPreferences preferences = new AppPreferences(this);
+        int playerId = preferences.getPlayerId();
+        if(preferences.isAdmin()){
+            fetchInscriptions();
+        }else{
+            fetchTournamentsForPlayer(playerId);
+        }
+
     }
 
     private void loadApiService() {
@@ -71,7 +81,31 @@ public class InscriptionsActivity extends AppCompatActivity {
     }
 
     private void fetchInscriptions() {
-        inscriptionService.getAllInscriptions().enqueue(new Callback<List<Inscriptions>>() {
+        AppPreferences preferences = new AppPreferences(this);
+        if (preferences.isAdmin()) {
+            inscriptionService.getAllInscriptions().enqueue(new Callback<List<Inscriptions>>() {
+                @Override
+                public void onResponse(Call<List<Inscriptions>> call, Response<List<Inscriptions>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<Inscriptions> inscriptions = response.body();
+                        InscriptionAdapter adapter = new InscriptionAdapter(InscriptionsActivity.this, inscriptions);
+                        listViewInscriptions.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(InscriptionsActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Inscriptions>> call, Throwable t) {
+                    Toast.makeText(InscriptionsActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void fetchTournamentsForPlayer(int playerId) {
+        inscriptionService.getInscriptionByPlayerId(playerId).enqueue(new Callback<List<Inscriptions>>() {
+
             @Override
             public void onResponse(Call<List<Inscriptions>> call, Response<List<Inscriptions>> response) {
                 if (response.isSuccessful() && response.body() != null) {

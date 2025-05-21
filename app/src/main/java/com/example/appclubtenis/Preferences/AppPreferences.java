@@ -17,6 +17,8 @@ public class AppPreferences {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_LOGGED_IN = "logged_in";
+    private static final String KEY_PLAYER_ID = "player_id";
+    private static final String KEY_IS_ADMIN = "is_admin";
 
     private SharedPreferences preferences;
     private SharedPreferences encryptedPrefs;
@@ -89,5 +91,21 @@ public class AppPreferences {
 
     public boolean isLoggedIn() {
         return preferences.getBoolean(KEY_LOGGED_IN, false);
+    }
+
+    public void setPlayerId(int playerId) {
+        preferences.edit().putInt(KEY_PLAYER_ID, playerId).apply();
+    }
+
+    public int getPlayerId() {
+        return preferences.getInt(KEY_PLAYER_ID, -1);
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        preferences.edit().putBoolean(KEY_IS_ADMIN, isAdmin).apply();
+    }
+
+    public boolean isAdmin() {
+        return preferences.getBoolean(KEY_IS_ADMIN, false);
     }
 }

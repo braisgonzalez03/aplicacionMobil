@@ -28,6 +28,21 @@ public class Players {
     @SerializedName("password")
     private String password;
 
+    private String imageName;
+
+    public Players() {
+    }
+
+    public Players(Integer playerId, String name, String surnames, String email, int phone, String dni, String userName, String password) {
+        this.playerId = playerId;
+        this.name = name;
+        this.surnames = surnames;
+        this.email = email;
+        this.phone = phone;
+        this.dni = dni;
+        this.userName = userName;
+        this.password = password;
+    }
 
     public Integer getPlayerId() {
         return playerId;
@@ -92,5 +107,13 @@ public class Players {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

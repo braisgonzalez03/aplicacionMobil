@@ -28,6 +28,7 @@ public class ConfigDAO {
         if (cursor.moveToFirst()) {
             config.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_URL)));
             config.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USERNAME)));
+            config.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PASSWORD)));
         }
         cursor.close();
         return config;
