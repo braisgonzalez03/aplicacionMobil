@@ -20,14 +20,7 @@ import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.PlayerService;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,22 +77,6 @@ public class PlayersActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         List<Players> playersList = response.body();
 
-                        Map<Integer, String> idToImageMap = new HashMap<>();
-                        idToImageMap.put(1, "tenista1.png");
-                        idToImageMap.put(2, "tenista2.png");
-                        idToImageMap.put(3, "tenista3.jpg");
-                        idToImageMap.put(4, "tenista4.jpg");
-                        idToImageMap.put(5, "tenista5.jpg");
-                        idToImageMap.put(6, "tenista6.png");
-                        idToImageMap.put(7, "tenista7.png");
-
-
-                        for (Players player : playersList) {
-                            String imageName = idToImageMap.get(player.getPlayerId());
-                            player.setImageName(imageName != null ? imageName : "default.png");
-                            copyAssetToInternalStorage("images/" + player.getImageName(), player.getImageName());
-                        }
-
                         PlayersAdapter adapter = new PlayersAdapter(PlayersActivity.this, playersList);
                         listViewPlayers.setAdapter(adapter);
                     } else {
@@ -119,10 +96,6 @@ public class PlayersActivity extends AppCompatActivity {
                 public void onResponse(Call<Players> call, Response<Players> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Players player = response.body();
-
-                        if(player.getImageName() != null){
-                            copyAssetToInternalStorage("images/" + player.getImageName(), player.getImageName());
-                        }
                         listViewPlayers.setAdapter(new PlayersAdapter(PlayersActivity.this, List.of(player)));
                     } else {
                         Toast.makeText(PlayersActivity.this, "No se pudo obtener tu información", Toast.LENGTH_SHORT).show();
@@ -138,21 +111,5 @@ public class PlayersActivity extends AppCompatActivity {
     }
 
 
-    private void copyAssetToInternalStorage(String assetPath, String outputName) {
-        File outFile = new File(getFilesDir(), outputName);
-        if (outFile.exists()) return;
 
-        try (InputStream in = getAssets().open(assetPath);
-             OutputStream out = new FileOutputStream(outFile)) {
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

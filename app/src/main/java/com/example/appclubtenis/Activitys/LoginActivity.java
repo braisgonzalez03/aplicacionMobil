@@ -2,7 +2,9 @@ package com.example.appclubtenis.Activitys;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,7 +15,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appclubtenis.Adapter.ImageAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
 import com.example.appclubtenis.Helper.LanguageLocale;
@@ -21,6 +26,11 @@ import com.example.appclubtenis.Model.Players;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.PlayerService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private PlayerService playerService;
     private ConfigDAO configDAO;
     private AppPreferences appPreferences;
+    private RecyclerView recyclerViewImages;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -54,6 +65,24 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        recyclerViewImages = findViewById(R.id.recyclerViewImages);
+        recyclerViewImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+
+        int[] imageResIds = new int[] {
+                R.raw.tenista1,
+                R.raw.tenista2,
+                R.raw.tenista3,
+                R.raw.tenista4,
+                R.raw.tenista5,
+                R.raw.tenista6,
+                R.raw.tenista7,
+                R.raw.tenista8
+        };
+
+        ImageAdapter adapter = new ImageAdapter(this, imageResIds);
+        recyclerViewImages.setAdapter(adapter);
+
         appPreferences = new AppPreferences(this);
 
         if (appPreferences.isDarkMode()) {
@@ -62,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        setContentView(R.layout.activity_login);
 
         usernameEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
@@ -160,5 +188,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

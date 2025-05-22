@@ -15,7 +15,7 @@ public class LanguageLocale {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return updateResources(context, language);
         }
-        return updateResourcesLegacy(context, language);
+        return updateResources(context, language);
     }
 
 
@@ -33,17 +33,4 @@ public class LanguageLocale {
         return context.createConfigurationContext(config);
     }
 
-    @SuppressWarnings("deprecation")
-    private static Context updateResourcesLegacy(Context context, String language) {
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-
-        Resources resources = context.getResources();
-
-        Configuration config = resources.getConfiguration();
-        config.locale = locale;
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-
-        return context;
-    }
 }
