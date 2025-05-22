@@ -19,31 +19,15 @@ public class AppPreferences {
     private static final String KEY_LOGGED_IN = "logged_in";
     private static final String KEY_PLAYER_ID = "player_id";
     private static final String KEY_IS_ADMIN = "is_admin";
+    private static final String KEY_SELECTED_IMAGE_POS = "selected_image_position";
 
     private SharedPreferences preferences;
-    private SharedPreferences encryptedPrefs;
 
     public AppPreferences(Context context) {
         preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-        try {
-            MasterKey masterKey = new MasterKey.Builder(context)
-                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                    .build();
-
-            encryptedPrefs = EncryptedSharedPreferences.create(
-                    context,
-                    PREFERENCES_NAME + "_encrypted",
-                    masterKey,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            );
-        } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
-            encryptedPrefs = preferences;
-        }
     }
 
-    // Idioma y tema sin cifrar
+    // Idioma y tema
     public void setLanguage(String language) {
         preferences.edit().putString(KEY_LANGUAGE, language).apply();
     }
@@ -64,6 +48,7 @@ public class AppPreferences {
         return "dark".equalsIgnoreCase(getTheme());
     }
 
+    // Username y password (sin cifrar)
     public void setUsername(String username) {
         preferences.edit().putString(KEY_USERNAME, username).apply();
     }
@@ -73,18 +58,18 @@ public class AppPreferences {
     }
 
     public void setPassword(String password) {
-        encryptedPrefs.edit().putString(KEY_PASSWORD, password).apply();
+        preferences.edit().putString(KEY_PASSWORD, password).apply();
     }
 
     public String getPassword() {
-        return encryptedPrefs.getString(KEY_PASSWORD, null);
+        return preferences.getString(KEY_PASSWORD, null);
     }
 
     public void clearCredentials() {
-        preferences.edit().remove(KEY_USERNAME).apply();
-        encryptedPrefs.edit().remove(KEY_PASSWORD).apply();
+        preferences.edit().remove(KEY_USERNAME).remove(KEY_PASSWORD).apply();
     }
 
+    // Login status
     public void setLoggedIn(boolean loggedIn) {
         preferences.edit().putBoolean(KEY_LOGGED_IN, loggedIn).apply();
     }
@@ -93,6 +78,7 @@ public class AppPreferences {
         return preferences.getBoolean(KEY_LOGGED_IN, false);
     }
 
+    // Player Id
     public void setPlayerId(int playerId) {
         preferences.edit().putInt(KEY_PLAYER_ID, playerId).apply();
     }
@@ -101,11 +87,20 @@ public class AppPreferences {
         return preferences.getInt(KEY_PLAYER_ID, -1);
     }
 
+    // Admin flag
     public void setIsAdmin(boolean isAdmin) {
         preferences.edit().putBoolean(KEY_IS_ADMIN, isAdmin).apply();
     }
 
     public boolean isAdmin() {
         return preferences.getBoolean(KEY_IS_ADMIN, false);
+    }
+
+    public void setSelectedImagePosition(int position) {
+        preferences.edit().putInt(KEY_SELECTED_IMAGE_POS, position).apply();
+    }
+
+    public int getSelectedImagePosition() {
+        return preferences.getInt(KEY_SELECTED_IMAGE_POS, -1); 
     }
 }

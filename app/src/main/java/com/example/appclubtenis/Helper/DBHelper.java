@@ -13,13 +13,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_URL = "url";
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_PASSWORD = "password";
+    public static final String COLUMN_IMAGE = "image";
 
     private static final String CREATE_CONFIG_TABLE =
             "CREATE TABLE " + TABLE_CONFIG + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_URL + " TEXT, " +
                     COLUMN_USERNAME + " TEXT, " +
-                    COLUMN_PASSWORD + " TEXT" + ")";
+                    COLUMN_PASSWORD + " TEXT, " +
+                    COLUMN_IMAGE + " TEXT)";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,14 +30,13 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CONFIG_TABLE);
-        // Valores por defecto
+
         db.execSQL("INSERT INTO " + TABLE_CONFIG + " (url, username, password) VALUES " +
                 "('http://10.0.2.2:8080/', '', '')");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Simple upgrade policy
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONFIG);
         onCreate(db);
     }

@@ -52,13 +52,13 @@ public class TournamentActivity extends AppCompatActivity {
             return insets;
         });
 
-
+        AppPreferences prefs = new AppPreferences(this);
         listViewTournaments = findViewById(R.id.listViewTournament);
         configDAO = new ConfigDAO(this);
 
         loadApiService();
 
-        AppPreferences prefs = new AppPreferences(this);
+
         int playerId = prefs.getPlayerId();
         if (prefs.isAdmin()) {
             fetchTournaments();
@@ -69,13 +69,17 @@ public class TournamentActivity extends AppCompatActivity {
     }
 
     private void loadApiService() {
-        ConfigModel config = configDAO.getConfig();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        List<ConfigModel> configList = configDAO.getAllConfigs();
+        if (!configList.isEmpty()) {
+            ConfigModel config = configList.get(0);
 
-        tournamentService = retrofit.create(TournamentService.class);
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(config.getUrl())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            tournamentService = retrofit.create(TournamentService.class);
+        }
     }
 
     private void fetchTournaments() {

@@ -3,6 +3,7 @@ package com.example.appclubtenis.Activitys;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +20,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView welcomeTextView;
     private Button btnPlayers, btnTournaments, btnInscriptions, btnSettings, btnLogout;
     private AppPreferences appPreferences;
+    private ImageView userImageView;
+
+    private final int[] imageResIds = {
+            R.raw.tenista1,
+            R.raw.tenista2,
+            R.raw.tenista3,
+            R.raw.tenista4,
+            R.raw.tenista5,
+            R.raw.tenista6,
+            R.raw.tenista7,
+            R.raw.tenista8
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +53,18 @@ public class MainActivity extends AppCompatActivity {
         btnSettings = findViewById(R.id.btnSettings);
         btnLogout = findViewById(R.id.btnLogout);
 
+        String username = appPreferences.getUsername();
+        welcomeTextView.setText("Bienvenido, " + (username != null ? username : "invitado"));
+
+        int selectedPosition = appPreferences.getSelectedImagePosition();
+        if (selectedPosition != -1 && selectedPosition < imageResIds.length) {
+
+            userImageView = findViewById(R.id.imageViewPlayer);
+            if (userImageView != null) {
+                userImageView.setImageResource(imageResIds[selectedPosition]);
+            }
+        }
+
         if (!appPreferences.isLoggedIn()) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -54,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        String username = appPreferences.getUsername();
-        welcomeTextView.setText("Bienvenido, " + (username != null ? username : "invitado"));
 
         btnPlayers.setOnClickListener(v -> {
             Intent player = new Intent(this, PlayersActivity.class);

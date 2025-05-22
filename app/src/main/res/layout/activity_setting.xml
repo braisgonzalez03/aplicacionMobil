@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:text="@string/url_del_servidor"
-            android:textColor="@color/white"
+            android:textColor="#9E9A9A"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
             android:text="@string/usuario"
-            android:textColor="@color/white"
+            android:textColor="#A6A2A2"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -57,7 +57,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
             android:text="@string/contrase_a"
-            android:textColor="@color/white"
+            android:textColor="#9E9A9A"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -78,7 +78,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
             android:text="@string/idioma"
-            android:textColor="@color/white"
+            android:textColor="#9E9A9A"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -95,7 +95,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="4dp"
             android:text="@string/tema"
-            android:textColor="@color/white"
+            android:textColor="#9E9A9A"
             android:textSize="16sp"
             android:textStyle="bold" />
 

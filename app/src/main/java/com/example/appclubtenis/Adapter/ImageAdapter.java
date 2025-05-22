@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appclubtenis.R;
@@ -22,6 +24,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     private final Context context;
     private final int[] imageResIds;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public ImageAdapter(Context context, int[] imageResIds) {
         this.context = context;
@@ -36,10 +50,35 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ImageViewHolder holder, int position) {
         int resId = imageResIds[position];
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
         holder.imageView.setImageBitmap(bitmap);
+
+        if (selectedPosition == position) {
+            holder.itemView.setBackgroundResource(R.color.tennis_court_black);
+        } else {
+            holder.itemView.setBackgroundResource(0);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int currentPosition = holder.getAdapterPosition();
+                if (currentPosition == RecyclerView.NO_POSITION) return;
+
+                int previousSelected = selectedPosition;
+                selectedPosition = currentPosition;
+
+                notifyItemChanged(previousSelected);
+                notifyItemChanged(selectedPosition);
+
+                if (listener != null) {
+                    listener.onItemClick(currentPosition);
+                }
+            }
+        });
     }
 
     @Override
@@ -54,5 +93,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             super(itemView);
             imageView = itemView.findViewById(R.id.imageViewItem);
         }
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
+    public void setSelectedPosition(int position) {
+        int previousSelected = selectedPosition;
+        selectedPosition = position;
+        notifyItemChanged(previousSelected);
+        notifyItemChanged(selectedPosition);
     }
 }

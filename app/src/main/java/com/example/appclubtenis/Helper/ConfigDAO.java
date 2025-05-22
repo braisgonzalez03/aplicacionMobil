@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConfigDAO {
 
     private DBHelper dbHelper;
@@ -18,19 +21,46 @@ public class ConfigDAO {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_URL, url);
         values.put(DBHelper.COLUMN_USERNAME, username);
-        db.update(DBHelper.TABLE_CONFIG, values, DBHelper.COLUMN_ID + " = ?", new String[]{"1"});
+        values.put(DBHelper.COLUMN_PASSWORD, password);
+        db.insert(DBHelper.TABLE_CONFIG, null, values);
     }
 
-    public ConfigModel getConfig() {
+    public List<ConfigModel> getAllConfigs() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(DBHelper.TABLE_CONFIG, null, DBHelper.COLUMN_ID + " = ?", new String[]{"1"}, null, null, null);
-        ConfigModel config = new ConfigModel();
-        if (cursor.moveToFirst()) {
+
+        String[] projection = {
+                DBHelper.COLUMN_URL,
+                DBHelper.COLUMN_USERNAME,
+                DBHelper.COLUMN_PASSWORD
+        };
+
+        Cursor cursor = db.query(
+                DBHelper.TABLE_CONFIG,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        List<ConfigModel> configList = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            ConfigModel config = new ConfigModel();
+
             config.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_URL)));
             config.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USERNAME)));
-            config.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PASSWORD)));
+            config.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PASSWORD)));
+
+            configList.add(config);
         }
+
         cursor.close();
-        return config;
+
+        return configList;
     }
+
+
+
 }

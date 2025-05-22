@@ -54,13 +54,14 @@ public class InscriptionsActivity extends AppCompatActivity {
             return insets;
         });
 
+        AppPreferences preferences = new AppPreferences(this);
 
         listViewInscriptions = findViewById(R.id.listViewInscriptions);
         configDAO = new ConfigDAO(this);
 
         loadApiService();
 
-        AppPreferences preferences = new AppPreferences(this);
+
         int playerId = preferences.getPlayerId();
         if(preferences.isAdmin()){
             fetchInscriptions();
@@ -71,13 +72,20 @@ public class InscriptionsActivity extends AppCompatActivity {
     }
 
     private void loadApiService() {
-        ConfigModel config = configDAO.getConfig();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        List<ConfigModel> configList = configDAO.getAllConfigs();
 
-        inscriptionService = retrofit.create(InscriptionService.class);
+        if (!configList.isEmpty()) {
+            ConfigModel config = configList.get(0);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(config.getUrl())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            inscriptionService = retrofit.create(InscriptionService.class);
+        } else {
+            Toast.makeText(this, "No hay configuraciones guardadas", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fetchInscriptions() {

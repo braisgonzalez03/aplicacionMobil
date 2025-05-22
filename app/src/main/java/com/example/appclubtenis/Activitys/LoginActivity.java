@@ -79,11 +79,21 @@ public class LoginActivity extends AppCompatActivity {
                 R.raw.tenista7,
                 R.raw.tenista8
         };
+        appPreferences = new AppPreferences(this);
 
         ImageAdapter adapter = new ImageAdapter(this, imageResIds);
         recyclerViewImages.setAdapter(adapter);
 
-        appPreferences = new AppPreferences(this);
+        int savedPosition = appPreferences.getSelectedImagePosition();
+        if (savedPosition != -1) {
+            adapter.setSelectedPosition(savedPosition);
+        }
+
+        adapter.setOnItemClickListener(position -> {
+            appPreferences.setSelectedImagePosition(position);
+        });
+
+
 
         if (appPreferences.isDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -117,13 +127,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadApiService() {
-        ConfigModel config = configDAO.getConfig();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        List<ConfigModel> configList = configDAO.getAllConfigs();
 
-        playerService = retrofit.create(PlayerService.class);
+        if (!configList.isEmpty()) {
+            ConfigModel config = configList.get(0);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(config.getUrl())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            playerService = retrofit.create(PlayerService.class);
+        } else {
+            Toast.makeText(this, "No hay configuraciones guardadas", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

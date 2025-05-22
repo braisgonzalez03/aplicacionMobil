@@ -59,13 +59,20 @@ public class PlayersActivity extends AppCompatActivity {
     }
 
     private void loadApiService() {
-        ConfigModel config = configDAO.getConfig();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        List<ConfigModel> configList = configDAO.getAllConfigs();
 
-        playerService = retrofit.create(PlayerService.class);
+        if (!configList.isEmpty()) {
+            ConfigModel config = configList.get(0);
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(config.getUrl())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            playerService = retrofit.create(PlayerService.class);
+        } else {
+            Toast.makeText(this, "No hay configuración guardada", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fetchPlayers() {
@@ -109,7 +116,6 @@ public class PlayersActivity extends AppCompatActivity {
             });
         }
     }
-
 
 
 }

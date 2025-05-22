@@ -20,6 +20,9 @@ import com.example.appclubtenis.Helper.ConfigModel;
 import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
+import com.example.appclubtenis.Utils.EncryptionPassword;
+
+import java.util.List;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -78,12 +81,12 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void loadSettings() {
-        // Cargar desde SQLite
-        ConfigModel config = configDAO.getConfig();
-        if (config != null) {
+        List<ConfigModel> configList = configDAO.getAllConfigs();
+        if (!configList.isEmpty()) {
+            ConfigModel config = configList.get(0);
             urlEditText.setText(config.getUrl());
             usernameEditText.setText(config.getUsername());
-         }
+        }
 
         String savedUsername = appPreferences.getUsername();
         String savedPassword = appPreferences.getPassword();
@@ -96,12 +99,22 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         String language = appPreferences.getLanguage();
-        int langPos = ((ArrayAdapter) languageSpinner.getAdapter()).getPosition(language);
-        languageSpinner.setSelection(langPos >= 0 ? langPos : 0);
+        ArrayAdapter languageAdapter = (ArrayAdapter) languageSpinner.getAdapter();
+        int langPos = languageAdapter.getPosition(language);
+        if (langPos >= 0) {
+            languageSpinner.setSelection(langPos);
+        } else {
+            languageSpinner.setSelection(0);
+        }
 
         String theme = appPreferences.getTheme();
-        int themePos = ((ArrayAdapter) themeSpinner.getAdapter()).getPosition(theme);
-        themeSpinner.setSelection(themePos >= 0 ? themePos : 0);
+        ArrayAdapter themeAdapter = (ArrayAdapter) themeSpinner.getAdapter();
+        int themePos = themeAdapter.getPosition(theme);
+        if (themePos >= 0) {
+            themeSpinner.setSelection(themePos);
+        } else {
+            themeSpinner.setSelection(0);
+        }
     }
 
     private void saveSettings() {
@@ -116,7 +129,9 @@ public class SettingActivity extends AppCompatActivity {
             return;
         }
 
-       configDAO.updateConfig(url, username, ""); // dejamos password vacía en SQLite por seguridad
+        String encryptedPassword = EncryptionPassword.encrypt(password);
+
+       configDAO.updateConfig(url, username, encryptedPassword);
 
 
         appPreferences.setUsername(username);
