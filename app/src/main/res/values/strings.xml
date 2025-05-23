@@ -20,6 +20,7 @@
     <string name="idioma">Language</string>
     <string name="tema">Theme</string>
     <string name="nombre">Name</string>
-    <string name="player_image">imagen</string>
+    <string name="player_image">image</string>
+    <string name="welcome">"Welcome, "</string>
 </resources>
 
