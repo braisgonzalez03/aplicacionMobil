@@ -54,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
 
         String username = appPreferences.getUsername();
-        welcomeTextView.setText("Bienvenido, " + (username != null ? username : "invitado"));
-
+        if (username != null) {
+            welcomeTextView.setText(getString(R.string.welcome) + username);
+        } else {
+            welcomeTextView.setText(getString(R.string.welcome)+" invitado");
+        }
         int selectedPosition = appPreferences.getSelectedImagePosition();
         if (selectedPosition != -1 && selectedPosition < imageResIds.length) {
 
