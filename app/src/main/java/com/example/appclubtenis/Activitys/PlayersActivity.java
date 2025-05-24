@@ -20,6 +20,9 @@ import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.PlayerService;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -84,7 +87,10 @@ public class PlayersActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         List<Players> playersList = response.body();
 
-                        PlayersAdapter adapter = new PlayersAdapter(PlayersActivity.this, playersList);
+
+                        List<String> imageNames = getImageAssetNames();
+
+                        PlayersAdapter adapter = new PlayersAdapter(PlayersActivity.this, playersList,imageNames);
                         listViewPlayers.setAdapter(adapter);
                     } else {
                         Toast.makeText(PlayersActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
@@ -103,7 +109,10 @@ public class PlayersActivity extends AppCompatActivity {
                 public void onResponse(Call<Players> call, Response<Players> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Players player = response.body();
-                        listViewPlayers.setAdapter(new PlayersAdapter(PlayersActivity.this, List.of(player)));
+
+                        List<String> imageNames = getImageAssetNames();
+
+                        listViewPlayers.setAdapter(new PlayersAdapter(PlayersActivity.this, List.of(player),imageNames));
                     } else {
                         Toast.makeText(PlayersActivity.this, "No se pudo obtener tu información", Toast.LENGTH_SHORT).show();
                     }
@@ -115,6 +124,23 @@ public class PlayersActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+    private List<String> getImageAssetNames() {
+        List<String> imageNames = new ArrayList<String>();
+        try {
+            String[] files = getAssets().list("");
+            if (files != null) {
+                for (int i = 0; i < files.length; i++) {
+                    String file = files[i];
+                    if (file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg")) {
+                        imageNames.add(file);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageNames;
     }
 
 
