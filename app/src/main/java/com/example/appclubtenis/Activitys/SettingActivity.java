@@ -1,6 +1,8 @@
 package com.example.appclubtenis.Activitys;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,13 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appclubtenis.Adapter.ImageAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
 import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Utils.EncryptionPassword;
+import com.example.appclubtenis.Utils.ImageUtils;
 
 import java.util.List;
 
@@ -62,6 +68,7 @@ public class SettingActivity extends AppCompatActivity {
         themeSpinner = findViewById(R.id.spinnerTheme);
         saveButton = findViewById(R.id.buttonSaveSettings);
 
+        urlEditText.setText("http://10.0.2.2:8080/");
         setupSpinners();
         loadSettings();
 
@@ -131,7 +138,7 @@ public class SettingActivity extends AppCompatActivity {
 
         String encryptedPassword = EncryptionPassword.encrypt(password);
 
-       configDAO.updateConfig(url, username, encryptedPassword);
+        configDAO.updateConfig(url, username, encryptedPassword);
 
 
         appPreferences.setUsername(username);

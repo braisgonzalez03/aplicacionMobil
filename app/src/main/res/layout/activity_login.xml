@@ -13,7 +13,7 @@
         android:text="@string/app_name"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@color/tennis_court_black"
+        android:textColor="#686363"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="32dp"
         />
@@ -52,32 +52,33 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        android:scrollbars="horizontal"
-        />
+        android:scrollbars="horizontal" />
+
+
 
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/iniciar_sesi_n"
-        android:backgroundTint="@color/tennis_yellow"
+        android:background="@drawable/button_login_background"
         android:textColor="@color/tennis_court_green_button"
         android:textStyle="bold"
         android:padding="12dp"
         android:layout_marginBottom="12dp"
-        app:cornerRadius="10dp"
-        />
+        android:elevation="4dp"
+        app:backgroundTint="@null" />
 
     <Button
         android:id="@+id/buttonConfig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/configuraci_n"
-        android:backgroundTint="@color/white_translucent"
+        android:background="@drawable/button_config_background"
         android:textColor="@color/tennis_yellow"
         android:textStyle="bold"
         android:padding="12dp"
-        android:background="@drawable/tennis_edittext"
-        />
+        android:elevation="4dp"
+        app:backgroundTint="@null" />
 
 </LinearLayout>
