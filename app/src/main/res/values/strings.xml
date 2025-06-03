@@ -23,4 +23,9 @@
     <string name="player_image">imagen</string>
     <string name="welcome">"Bienvenido, "</string>
     <string name="credenciales_incorrectas">Credenciales incorrectas</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_galician">Gallego</string>
+    <string name="tienes_que_guardar_una_configuracion_primero">Tienes que guardar una configuracion primero</string>
+    <string name="password_encrypted_message">Contraseña cifrada</string>
+    <string name="password_empty_message">Contraseña vacía, se guardará como tal</string>
 </resources>

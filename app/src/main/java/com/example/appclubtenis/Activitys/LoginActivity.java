@@ -138,8 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                     .build();
 
             playerService = retrofit.create(PlayerService.class);
-        } else {
-            Toast.makeText(this, "No hay configuraciones guardadas", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -157,6 +155,12 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Introduce userName and password", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (playerService == null) {
+            Toast.makeText(this, getString(R.string.tienes_que_guardar_una_configuracion_primero), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
+            startActivity(intent);
+            return;
+        }
         if(username.equals("admin") && password.equals("admin123")) {
             appPreferences.setUsername(username);
             appPreferences.setPassword(password);
@@ -171,7 +175,10 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             return;
+
+
         }
+
 
         Players player = new Players();
         player.setUserName(username);

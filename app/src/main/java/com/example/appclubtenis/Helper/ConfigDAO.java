@@ -56,6 +56,7 @@ public class ConfigDAO {
         }
 
         cursor.close();
+        db.close();
 
         return configList;
     }

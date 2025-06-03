@@ -20,6 +20,7 @@ public class AppPreferences {
     private static final String KEY_PLAYER_ID = "player_id";
     private static final String KEY_IS_ADMIN = "is_admin";
     private static final String KEY_SELECTED_IMAGE_POS = "selected_image_position";
+    private static final String KEY_SERVER_URL = "server_url";
 
     private SharedPreferences preferences;
 
@@ -101,6 +102,13 @@ public class AppPreferences {
     }
 
     public int getSelectedImagePosition() {
-        return preferences.getInt(KEY_SELECTED_IMAGE_POS, -1); 
+        return preferences.getInt(KEY_SELECTED_IMAGE_POS, -1);
+    }
+    public void setServerUrl(String url) {
+        preferences.edit().putString(KEY_SERVER_URL, url).apply();
+    }
+
+    public String getServerUrl() {
+        return preferences.getString(KEY_SERVER_URL, null);
     }
 }

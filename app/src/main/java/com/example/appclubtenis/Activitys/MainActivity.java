@@ -1,5 +1,6 @@
 package com.example.appclubtenis.Activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -7,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 
@@ -33,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
             R.raw.tenista8
     };
 
+    private static final int SETTINGS_REQUEST_CODE = 1001;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        AppPreferences prefs = new AppPreferences(newBase);
+        String language = prefs.getLanguage();
+        super.attachBaseContext(LanguageLocale.setLocale(newBase, language));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         btnPlayers = findViewById(R.id.btnPlayers);
         btnTournaments = findViewById(R.id.btnTournaments);
         btnInscriptions = findViewById(R.id.btnInscriptions);
-        btnSettings = findViewById(R.id.btnSettings);
         btnLogout = findViewById(R.id.btnLogout);
 
         String username = appPreferences.getUsername();
@@ -98,10 +108,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(inscription);
              });
 
-        btnSettings.setOnClickListener(v -> {
-            startActivity(new Intent(this, SettingActivity.class));
-        });
-
         btnLogout.setOnClickListener(v -> {
             appPreferences.setLoggedIn(false);
             appPreferences.clearCredentials();
@@ -111,5 +117,22 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SETTINGS_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                boolean languageChanged = data.getBooleanExtra(SettingActivity.RESULT_LANGUAGE_CHANGED, false);
+                 boolean themeChanged = data.getBooleanExtra(SettingActivity.RESULT_THEME_CHANGED, false);
+
+                if (languageChanged || themeChanged ) {
+                    recreate();
+                }
+
+            }
+        }
     }
 }

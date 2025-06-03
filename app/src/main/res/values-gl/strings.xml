@@ -23,4 +23,10 @@
     <string name="player_image">imaxe</string>
     <string name="welcome">"Benvido, "</string>
     <string name="credenciales_incorrectas">Credenciais incorrectas</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_galician">Galego</string>
+    <string name="tienes_que_guardar_una_configuracion_primero">Tes que gardar unha configuración primeiro</string>
+    <string name="password_encrypted_message">Contrasinal cifrado.</string>
+    <string name="password_empty_message">Contrasinal baleiro, gardarase como tal.</string>
+
 </resources>
