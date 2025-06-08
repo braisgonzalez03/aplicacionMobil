@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:layout_gravity="end"
+        android:src="@drawable/exit"
+        android:background="@null"
+        android:id="@+id/btnCerrar"/>
+
     <ListView
         android:id="@+id/listViewTournament"
         android:layout_width="match_parent"

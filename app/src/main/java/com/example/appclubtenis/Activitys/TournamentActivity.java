@@ -1,7 +1,10 @@
 package com.example.appclubtenis.Activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ public class TournamentActivity extends AppCompatActivity {
     private ListView listViewTournaments;
     private TournamentService tournamentService;
     private ConfigDAO configDAO;
+    private ImageButton btnCerrar;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -51,6 +55,17 @@ public class TournamentActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        btnCerrar = findViewById(R.id.btnCerrar);
+
+        btnCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent main = new Intent(TournamentActivity.this, MainActivity.class);
+                startActivity(main);
+            }
+        });
+
 
         AppPreferences prefs = new AppPreferences(this);
         listViewTournaments = findViewById(R.id.listViewTournament);
@@ -93,13 +108,13 @@ public class TournamentActivity extends AppCompatActivity {
                         TournamentAdapter adapter = new TournamentAdapter(TournamentActivity.this, tournaments);
                         listViewTournaments.setAdapter(adapter);
                     } else {
-                        Toast.makeText(TournamentActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TournamentActivity.this, getString(R.string.no_se_pudo_obtener_la_lista), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Tournaments>> call, Throwable t) {
-                    Toast.makeText(TournamentActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TournamentActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -114,13 +129,13 @@ public class TournamentActivity extends AppCompatActivity {
                     TournamentAdapter adapter = new TournamentAdapter(TournamentActivity.this, tournaments);
                     listViewTournaments.setAdapter(adapter);
                 } else {
-                    Toast.makeText(TournamentActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TournamentActivity.this, getString(R.string.no_se_pudo_obtener_la_lista), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Tournaments>> call, Throwable t) {
-                Toast.makeText(TournamentActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TournamentActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
             }
         });
     }

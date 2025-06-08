@@ -16,12 +16,13 @@ public class ConfigDAO {
         dbHelper = new DBHelper(context);
     }
 
-    public void updateConfig(String url, String username, String password) {
+    public void updateConfig(String url, String username, String password, String image) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_URL, url);
         values.put(DBHelper.COLUMN_USERNAME, username);
         values.put(DBHelper.COLUMN_PASSWORD, password);
+        values.put(DBHelper.COLUMN_IMAGE, image);
         db.insert(DBHelper.TABLE_CONFIG, null, values);
     }
 
@@ -31,7 +32,8 @@ public class ConfigDAO {
         String[] projection = {
                 DBHelper.COLUMN_URL,
                 DBHelper.COLUMN_USERNAME,
-                DBHelper.COLUMN_PASSWORD
+                DBHelper.COLUMN_PASSWORD,
+                DBHelper.COLUMN_IMAGE
         };
 
         Cursor cursor = db.query(
@@ -52,6 +54,7 @@ public class ConfigDAO {
             config.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_URL)));
             config.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_USERNAME)));
             config.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_PASSWORD)));;
+            config.setImagen(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.COLUMN_IMAGE)));
             configList.add(config);
         }
 

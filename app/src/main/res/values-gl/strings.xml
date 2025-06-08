@@ -28,5 +28,17 @@
     <string name="tienes_que_guardar_una_configuracion_primero">Tes que gardar unha configuración primeiro</string>
     <string name="password_encrypted_message">Contrasinal cifrado.</string>
     <string name="password_empty_message">Contrasinal baleiro, gardarase como tal.</string>
+    <string name="error_al_encriptar_el_nombre_de_la_imagen">Fallou en cifrar o nome da imaxe</string>
+    <string name="la_url_no_puede_estar_vac_a">A URL non pode estar baleira</string>
+    <string name="configuraci_n_guardada">Configuración gardada</string>
+    <string name="error_al_cargar_la_contrase_a">Erro ao cargar o contrasinal</string>
+    <string name="no_hay_configuraciones_guardadas">Non hai configuracións gardadas</string>
+    <string name="no_se_pudo_obtener_la_lista">Non se puido obter a lista</string>
+    <string name="error_de_conexi_n">Erro de conexión</string>
+    <string name="introduce_nombre_y_contrase_a">Introduce nome e contrasinal</string>
+    <string name="bienvenido_admin">Benvido Admin</string>
+    <string name="bienvenido">"Benvido "</string>
+    <string name="no_hay_configuraci_n_guardada">Non hai configuración gardada</string>
+    <string name="no_se_pudo_obtener_tu_informaci_n">Non se puido obter a túa información</string>
 
 </resources>

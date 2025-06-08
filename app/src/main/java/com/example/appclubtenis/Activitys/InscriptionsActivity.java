@@ -1,7 +1,10 @@
 package com.example.appclubtenis.Activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class InscriptionsActivity extends AppCompatActivity {
     private ListView listViewInscriptions;
     private InscriptionService inscriptionService;
     private ConfigDAO configDAO;
+    private ImageButton btnCerrar;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -53,6 +57,17 @@ public class InscriptionsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        btnCerrar = findViewById(R.id.btnCerrar);
+
+        btnCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent main = new Intent(InscriptionsActivity.this, MainActivity.class);
+                startActivity(main);
+            }
+        });
+
 
         AppPreferences preferences = new AppPreferences(this);
 
@@ -84,7 +99,7 @@ public class InscriptionsActivity extends AppCompatActivity {
 
             inscriptionService = retrofit.create(InscriptionService.class);
         } else {
-            Toast.makeText(this, "No hay configuraciones guardadas", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_hay_configuraciones_guardadas), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -99,13 +114,13 @@ public class InscriptionsActivity extends AppCompatActivity {
                         InscriptionAdapter adapter = new InscriptionAdapter(InscriptionsActivity.this, inscriptions);
                         listViewInscriptions.setAdapter(adapter);
                     } else {
-                        Toast.makeText(InscriptionsActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InscriptionsActivity.this, getString(R.string.no_se_pudo_obtener_la_lista), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Inscriptions>> call, Throwable t) {
-                    Toast.makeText(InscriptionsActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InscriptionsActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -121,13 +136,13 @@ public class InscriptionsActivity extends AppCompatActivity {
                     InscriptionAdapter adapter = new InscriptionAdapter(InscriptionsActivity.this, inscriptions);
                     listViewInscriptions.setAdapter(adapter);
                 } else {
-                    Toast.makeText(InscriptionsActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InscriptionsActivity.this, getString(R.string.no_se_pudo_obtener_la_lista), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Inscriptions>> call, Throwable t) {
-                Toast.makeText(InscriptionsActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InscriptionsActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
             }
         });
     }

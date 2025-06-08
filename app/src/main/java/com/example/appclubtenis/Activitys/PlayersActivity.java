@@ -1,7 +1,10 @@
 package com.example.appclubtenis.Activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,6 +39,7 @@ public class PlayersActivity extends AppCompatActivity {
     private ListView listViewPlayers;
     private PlayerService playerService;
     private ConfigDAO configDAO;
+    private ImageButton btnCerrar;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -54,11 +58,23 @@ public class PlayersActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        btnCerrar = findViewById(R.id.btnCerrar);
+
+        btnCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent main = new Intent(PlayersActivity.this, MainActivity.class);
+                startActivity(main);
+            }
+        });
 
         listViewPlayers = findViewById(R.id.listViewPlayers);
         configDAO = new ConfigDAO(this);
         loadApiService();
         fetchPlayers();
+
+
+
     }
 
     private void loadApiService() {
@@ -74,7 +90,7 @@ public class PlayersActivity extends AppCompatActivity {
 
             playerService = retrofit.create(PlayerService.class);
         } else {
-            Toast.makeText(this, "No hay configuración guardada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_hay_configuraci_n_guardada), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -93,13 +109,13 @@ public class PlayersActivity extends AppCompatActivity {
                         PlayersAdapter adapter = new PlayersAdapter(PlayersActivity.this, playersList,imageNames);
                         listViewPlayers.setAdapter(adapter);
                     } else {
-                        Toast.makeText(PlayersActivity.this, "No se pudo obtener la lista", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PlayersActivity.this, getString(R.string.no_se_pudo_obtener_la_lista), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Players>> call, Throwable t) {
-                    Toast.makeText(PlayersActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayersActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -114,13 +130,13 @@ public class PlayersActivity extends AppCompatActivity {
 
                         listViewPlayers.setAdapter(new PlayersAdapter(PlayersActivity.this, List.of(player),imageNames));
                     } else {
-                        Toast.makeText(PlayersActivity.this, "No se pudo obtener tu información", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PlayersActivity.this, getString(R.string.no_se_pudo_obtener_tu_informaci_n), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Players> call, Throwable t) {
-                    Toast.makeText(PlayersActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayersActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -28,4 +28,16 @@
     <string name="tienes_que_guardar_una_configuracion_primero">Tienes que guardar una configuracion primero</string>
     <string name="password_encrypted_message">Contraseña cifrada</string>
     <string name="password_empty_message">Contraseña vacía, se guardará como tal</string>
+    <string name="error_al_encriptar_el_nombre_de_la_imagen">Error al encriptar el nombre de la imagen</string>
+    <string name="la_url_no_puede_estar_vac_a">La URL no puede estar vacía</string>
+    <string name="configuraci_n_guardada">Configuración guardada</string>
+    <string name="error_al_cargar_la_contrase_a">Error al cargar la contraseña</string>
+    <string name="no_hay_configuraciones_guardadas">No hay configuraciones guardadas</string>
+    <string name="no_se_pudo_obtener_la_lista">No se pudo obtener la lista</string>
+    <string name="error_de_conexi_n">Error de conexión</string>
+    <string name="introduce_nombre_y_contrase_a">Introduce nombre y contraseña</string>
+    <string name="bienvenido_admin">Bienvenido Admin</string>
+    <string name="bienvenido">"Bienvenido "</string>
+    <string name="no_hay_configuraci_n_guardada">No hay configuración guardada</string>
+    <string name="no_se_pudo_obtener_tu_informaci_n">No se pudo obtener tu información</string>
 </resources>

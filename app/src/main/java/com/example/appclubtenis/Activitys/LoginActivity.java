@@ -26,6 +26,7 @@ import com.example.appclubtenis.Model.Players;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.PlayerService;
+import com.example.appclubtenis.Utils.EncryptionPassword;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private PlayerService playerService;
     private ConfigDAO configDAO;
     private AppPreferences appPreferences;
-    private RecyclerView recyclerViewImages;
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -65,35 +66,11 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        recyclerViewImages = findViewById(R.id.recyclerViewImages);
-        recyclerViewImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 
-        int[] imageResIds = new int[] {
-                R.raw.tenista1,
-                R.raw.tenista2,
-                R.raw.tenista3,
-                R.raw.tenista4,
-                R.raw.tenista5,
-                R.raw.tenista6,
-                R.raw.tenista7,
-                R.raw.tenista8
-        };
+
+
         appPreferences = new AppPreferences(this);
-
-        ImageAdapter adapter = new ImageAdapter(this, imageResIds);
-        recyclerViewImages.setAdapter(adapter);
-
-        int savedPosition = appPreferences.getSelectedImagePosition();
-        if (savedPosition != -1) {
-            adapter.setSelectedPosition(savedPosition);
-        }
-
-        adapter.setOnItemClickListener(position -> {
-            appPreferences.setSelectedImagePosition(position);
-        });
-
-
 
         if (appPreferences.isDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -116,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
             usernameEditText.setText(savedUser);
         }
         if(savedPass != null) {
-            passwordEditText.setText(savedPass);
+            String decryptedPassword = EncryptionPassword.decrypt(savedPass);
+            passwordEditText.setText(decryptedPassword);
         }
 
         loginButton.setOnClickListener(v -> loginUser());
@@ -152,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
 
         if (username.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Introduce userName and password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.introduce_nombre_y_contrase_a), Toast.LENGTH_SHORT).show();
             return;
         }
         if (playerService == null) {
@@ -168,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
             appPreferences.setIsAdmin(true);
             appPreferences.setPlayerId(-1);
 
-            Toast.makeText(this, "Welcome Admin", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.bienvenido_admin), Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -189,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Players> call, Response<Players> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Players player = response.body();
-                    Toast.makeText(LoginActivity.this, "Bienvenido " + player.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.bienvenido) + player.getName(), Toast.LENGTH_SHORT).show();
 
                     appPreferences.setUsername(username);
                     appPreferences.setPassword(password);
@@ -202,13 +180,13 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.credenciales_incorrectas), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Players> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getString(R.string.error_de_conexi_n), Toast.LENGTH_SHORT).show();
             }
         });
     }

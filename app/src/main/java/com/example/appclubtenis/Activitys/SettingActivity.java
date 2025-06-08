@@ -27,8 +27,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.appclubtenis.Adapter.CustomSpinnerAdapter;
+import com.example.appclubtenis.Adapter.ImageAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
 
 
@@ -39,6 +43,10 @@ import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 
 import com.example.appclubtenis.Utils.EncryptionPassword;
+import com.example.appclubtenis.Utils.SpinnerItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -50,6 +58,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private ImageButton saveButton;
 
+    private RecyclerView recyclerViewImages;
 
     private ConfigDAO configDAO;
 
@@ -94,9 +103,36 @@ public class SettingActivity extends AppCompatActivity {
 
         });
 
+        recyclerViewImages = findViewById(R.id.recyclerViewImages);
+        recyclerViewImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        int[] imageResIds = new int[] {
+                R.raw.tenista1,
+                R.raw.tenista2,
+                R.raw.tenista3,
+                R.raw.tenista4,
+                R.raw.tenista5,
+                R.raw.tenista6,
+                R.raw.tenista7,
+                R.raw.tenista8
+        };
+
         configDAO = new ConfigDAO(this);
 
         appPreferences = new AppPreferences(this);
+
+
+        ImageAdapter adapter = new ImageAdapter(this, imageResIds);
+        recyclerViewImages.setAdapter(adapter);
+
+        int savedPosition = appPreferences.getSelectedImagePosition();
+        if (savedPosition != -1) {
+            adapter.setSelectedPosition(savedPosition);
+        }
+
+        adapter.setOnItemClickListener(position -> {
+            appPreferences.setSelectedImagePosition(position);
+        });
 
 
         urlEditText = findViewById(R.id.editTextUrl);
@@ -124,13 +160,13 @@ public class SettingActivity extends AppCompatActivity {
 
     private void setupSpinners() {
 
-        String[] languages = {"es", "gl"};
+        List<SpinnerItem> languageItems = new ArrayList<>();
 
-        ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languages);
+        languageItems.add(new SpinnerItem("Español", R.drawable.es, "es"));
+        languageItems.add(new SpinnerItem("Galego", R.drawable.gl, "gl"));
 
-        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        languageSpinner.setAdapter(langAdapter);
+        CustomSpinnerAdapter languageAdapter = new CustomSpinnerAdapter(this, languageItems);
+        languageSpinner.setAdapter(languageAdapter);
 
 
         String[] themes = {"light", "dark"};
@@ -147,55 +183,48 @@ public class SettingActivity extends AppCompatActivity {
     private void loadSettings() {
 
         String savedUrl = appPreferences.getServerUrl();
-        String password = passwordEditText.getText().toString().trim();
+        String savedUsername = appPreferences.getUsername();
+        String savedEncryptedPassword = appPreferences.getPassword();
 
         if (savedUrl != null && !savedUrl.isEmpty()) {
-
             urlEditText.setText(savedUrl);
-
         } else {
-
             urlEditText.setText("http://10.0.2.2:8080/");
             usernameEditText.setText("");
             passwordEditText.setText("");
-
         }
-
-
-        String savedUsername = appPreferences.getUsername();
-
-
 
         if (savedUsername != null && !savedUsername.isEmpty()) {
-
             usernameEditText.setText(savedUsername);
-
         }
 
-        String encryptedPassword = "";
-        if (!password.isEmpty()) {
-            encryptedPassword = EncryptionPassword.encrypt(password);
-            Toast.makeText(this, getString(R.string.password_encrypted_message), Toast.LENGTH_SHORT).show();
+        if (savedEncryptedPassword != null && !savedEncryptedPassword.isEmpty()) {
+            try {
+                String decryptedPassword = EncryptionPassword.decrypt(savedEncryptedPassword);
+                passwordEditText.setText(decryptedPassword);
+            } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.error_al_cargar_la_contrase_a), Toast.LENGTH_LONG).show();
+                passwordEditText.setText("");
+                e.printStackTrace();
+            }
         } else {
-            Toast.makeText(this, getString(R.string.password_empty_message), Toast.LENGTH_SHORT).show();
+            passwordEditText.setText("");
         }
 
+        String languageToSelect = appPreferences.getLanguage();
+        CustomSpinnerAdapter languageAdapter = (CustomSpinnerAdapter) languageSpinner.getAdapter();
+        int langPos = 0;
 
-        String language = appPreferences.getLanguage();
-
-        ArrayAdapter languageAdapter = (ArrayAdapter) languageSpinner.getAdapter();
-
-        int langPos = languageAdapter.getPosition(language);
-
-        if (langPos >= 0) {
-
-            languageSpinner.setSelection(langPos);
-
-        } else {
-
-            languageSpinner.setSelection(0);
-
+        if (languageAdapter != null) {
+            for (int i = 0; i < languageAdapter.getCount(); i++) {
+                SpinnerItem item = languageAdapter.getItem(i);
+                if (item != null && item.getLanguageCode().equals(languageToSelect)) {
+                    langPos = i;
+                    break;
+                }
+            }
         }
+        languageSpinner.setSelection(langPos);
 
 
         String theme = appPreferences.getTheme();
@@ -218,66 +247,70 @@ public class SettingActivity extends AppCompatActivity {
 
 
     private void saveSettings() {
-
         String url = urlEditText.getText().toString().trim();
-
         String username = usernameEditText.getText().toString().trim();
-
         String password = passwordEditText.getText().toString().trim();
 
-        String language = languageSpinner.getSelectedItem().toString();
+        SpinnerItem selectedLanguageItem = (SpinnerItem) languageSpinner.getSelectedItem();
+        String newLanguage = selectedLanguageItem != null ? selectedLanguageItem.getLanguageCode() : "";
 
-        String theme = themeSpinner.getSelectedItem().toString();
+        String newTheme = themeSpinner.getSelectedItem().toString();
 
+        int selectedImagePosition = appPreferences.getSelectedImagePosition();
 
-        if (url.isEmpty()) {
-
-            Toast.makeText(this, "La URL no puede estar vacía", Toast.LENGTH_SHORT).show();
-
-            return;
-
+        String selectedImageName = null;
+        ImageAdapter adapter = (ImageAdapter) recyclerViewImages.getAdapter();
+        if (adapter != null && selectedImagePosition != RecyclerView.NO_POSITION) {
+            selectedImageName = adapter.getResourceName(selectedImagePosition);
+        }
+        String encryptedImageName = null;
+        if (selectedImageName != null && !selectedImageName.isEmpty()) {
+            try {
+                encryptedImageName = EncryptionPassword.encrypt(selectedImageName);
+            } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.error_al_encriptar_el_nombre_de_la_imagen), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         }
 
+        if (url.isEmpty()) {
+            Toast.makeText(this, getString(R.string.la_url_no_puede_estar_vac_a), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        String encryptedPassword = EncryptionPassword.encrypt(password);
+        String encryptedPassword = "";
+        if (!password.isEmpty()) {
+            encryptedPassword = EncryptionPassword.encrypt(password);
+            Toast.makeText(this, getString(R.string.password_encrypted_message), Toast.LENGTH_SHORT).show();
+        } else {
+            encryptedPassword = "";
+            Toast.makeText(this, getString(R.string.password_empty_message), Toast.LENGTH_SHORT).show();
+        }
 
         String oldLanguage = appPreferences.getLanguage();
-
         String oldTheme = appPreferences.getTheme();
 
-
-        configDAO.updateConfig(url, username, encryptedPassword);
-
+        configDAO.updateConfig(url, username, encryptedPassword,encryptedImageName);
 
         appPreferences.setUsername(username);
+        appPreferences.setPassword(encryptedPassword);
 
-        appPreferences.setPassword(password);
+        appPreferences.setLanguage(newLanguage);
+        appPreferences.setTheme(newTheme);
 
+        boolean languageChanged = !oldLanguage.equals(newLanguage);
+        boolean themeChanged = !oldTheme.equals(newTheme);
 
-        appPreferences.setLanguage(language);
+        Toast.makeText(this, getString(R.string.configuraci_n_guardada), Toast.LENGTH_SHORT).show();
 
-        appPreferences.setTheme(theme);
+        if (languageChanged) {
+            LanguageLocale.setLocale(this, newLanguage);
+        }
 
-
-        Intent resultIntent = new Intent();
-
-        boolean languageChanged = !oldLanguage.equals(language);
-
-        boolean themeChanged = !oldTheme.equals(theme);
-
-
-        resultIntent.putExtra(RESULT_LANGUAGE_CHANGED, languageChanged);
-
-        resultIntent.putExtra(RESULT_THEME_CHANGED, themeChanged);
-
-        setResult(RESULT_OK, resultIntent);
-
+        Intent loginIntent = new Intent(SettingActivity.this, LoginActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(loginIntent);
         finish();
-
-
-        Toast.makeText(this, "Configuración guardada", Toast.LENGTH_SHORT).show();
-
-
     }
 
 }

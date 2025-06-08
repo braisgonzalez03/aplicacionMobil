@@ -102,7 +102,26 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void setSelectedPosition(int position) {
         int previousSelected = selectedPosition;
         selectedPosition = position;
-        notifyItemChanged(previousSelected);
-        notifyItemChanged(selectedPosition);
+        if (previousSelected != RecyclerView.NO_POSITION) {
+            notifyItemChanged(previousSelected);
+        }
+        if (selectedPosition != RecyclerView.NO_POSITION) {
+            notifyItemChanged(selectedPosition);
+        }
+    }
+
+
+    public String getResourceName(int position) {
+        if (position >= 0 && position < imageResIds.length) {
+            return context.getResources().getResourceEntryName(imageResIds[position]);
+        }
+        return null;
+    }
+
+    public int getResourceIdByName(String resourceName) {
+        if (resourceName == null || resourceName.isEmpty()) {
+            return -1;
+        }
+        return context.getResources().getIdentifier(resourceName, "raw", context.getPackageName());
     }
 }
