@@ -17,7 +17,7 @@ public class EncryptionPassword {
 
     public static String encrypt(String input) {
         try {
-            byte[] iv = new byte[12]; // IV fijo por simplicidad (¡mejor usar aleatorio y guardarlo con el resultado!)
+            byte[] iv = new byte[12];
             Cipher cipher = Cipher.getInstance(AES_MODE);
             SecretKeySpec keySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
             GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);

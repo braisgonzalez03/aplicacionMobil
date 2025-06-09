@@ -21,7 +21,7 @@ import com.example.appclubtenis.R;
 
 public class MainActivity extends AppCompatActivity {
     private TextView welcomeTextView;
-    private Button btnPlayers, btnTournaments, btnInscriptions, btnSettings, btnLogout;
+    private Button btnPlayers, btnTournaments, btnInscriptions, btnLogout;
     private AppPreferences appPreferences;
     private ImageView userImageView;
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             R.raw.tenista8
     };
 
-    private static final int SETTINGS_REQUEST_CODE = 1001;
+    private static final int SETTINGS_REQUEST_CODE = 1001; // se utiliza para inicializar un valor que espera respuesta luego
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SETTINGS_REQUEST_CODE) {
+        if (requestCode == SETTINGS_REQUEST_CODE) { // Aquí comprobamos que si el código que se inicializa es el mismo definido, que siga comprobando y saque el resultado que esperamos
             if (resultCode == RESULT_OK && data != null) {
                 boolean languageChanged = data.getBooleanExtra(SettingActivity.RESULT_LANGUAGE_CHANGED, false);
                  boolean themeChanged = data.getBooleanExtra(SettingActivity.RESULT_THEME_CHANGED, false);

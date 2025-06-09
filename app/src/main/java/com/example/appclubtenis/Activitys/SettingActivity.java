@@ -2,49 +2,28 @@ package com.example.appclubtenis.Activitys;
 
 
 import android.content.Context;
-
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.widget.ArrayAdapter;
-
 import android.widget.EditText;
-
 import android.widget.ImageButton;
-
 import android.widget.Spinner;
-
 import android.widget.Toast;
-
-
 import androidx.activity.EdgeToEdge;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.core.graphics.Insets;
-
 import androidx.core.view.ViewCompat;
-
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
 import com.example.appclubtenis.Adapter.CustomSpinnerAdapter;
 import com.example.appclubtenis.Adapter.ImageAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
-
-
 import com.example.appclubtenis.Helper.LanguageLocale;
-
 import com.example.appclubtenis.Preferences.AppPreferences;
-
 import com.example.appclubtenis.R;
-
 import com.example.appclubtenis.Utils.EncryptionPassword;
 import com.example.appclubtenis.Utils.SpinnerItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,19 +32,12 @@ public class SettingActivity extends AppCompatActivity {
 
 
     private EditText urlEditText, usernameEditText, passwordEditText;
-
     private Spinner languageSpinner, themeSpinner;
-
     private ImageButton saveButton;
-
     private RecyclerView recyclerViewImages;
-
     private ConfigDAO configDAO;
-
     private AppPreferences appPreferences;
-
     public static final String RESULT_LANGUAGE_CHANGED = "language_changed";
-
     public static final String RESULT_THEME_CHANGED = "theme_changed";
 
 
@@ -162,7 +134,7 @@ public class SettingActivity extends AppCompatActivity {
 
         List<SpinnerItem> languageItems = new ArrayList<>();
 
-        languageItems.add(new SpinnerItem("Español", R.drawable.es, "es"));
+        languageItems.add(new SpinnerItem("Español", R.drawable.es, "es")); // Aquí recorremos la clase de lenguajes y luego las añadimos a una lista, asociando las variables a lo que queremos poner nosotros.
         languageItems.add(new SpinnerItem("Galego", R.drawable.gl, "gl"));
 
         CustomSpinnerAdapter languageAdapter = new CustomSpinnerAdapter(this, languageItems);

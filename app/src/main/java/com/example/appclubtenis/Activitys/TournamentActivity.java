@@ -24,7 +24,6 @@ import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.TournamentService;
 
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

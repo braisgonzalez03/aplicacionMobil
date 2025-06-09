@@ -15,12 +15,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.appclubtenis.Adapter.InscriptionAdapter;
-import com.example.appclubtenis.Adapter.TournamentAdapter;
 import com.example.appclubtenis.Helper.ConfigDAO;
 import com.example.appclubtenis.Helper.ConfigModel;
 import com.example.appclubtenis.Helper.LanguageLocale;
 import com.example.appclubtenis.Model.Inscriptions;
-import com.example.appclubtenis.Model.Tournaments;
 import com.example.appclubtenis.Preferences.AppPreferences;
 import com.example.appclubtenis.R;
 import com.example.appclubtenis.Service.InscriptionService;

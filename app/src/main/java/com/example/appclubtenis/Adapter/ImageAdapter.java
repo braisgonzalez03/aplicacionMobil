@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> { //Lo utilizamos porque con RecyclerView tenemos la opción de poner la lista de imágenes de manera horizontal
 
     private final Context context;
     private final int[] imageResIds;
@@ -118,10 +118,4 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return null;
     }
 
-    public int getResourceIdByName(String resourceName) {
-        if (resourceName == null || resourceName.isEmpty()) {
-            return -1;
-        }
-        return context.getResources().getIdentifier(resourceName, "raw", context.getPackageName());
-    }
 }

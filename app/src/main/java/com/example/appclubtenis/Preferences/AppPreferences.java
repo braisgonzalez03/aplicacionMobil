@@ -3,12 +3,6 @@ package com.example.appclubtenis.Preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKey;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 public class AppPreferences {
 
     private static final String PREFERENCES_NAME = "app_preferences";
@@ -28,7 +22,6 @@ public class AppPreferences {
         preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
-    // Idioma y tema
     public void setLanguage(String language) {
         preferences.edit().putString(KEY_LANGUAGE, language).apply();
     }
@@ -49,7 +42,6 @@ public class AppPreferences {
         return "dark".equalsIgnoreCase(getTheme());
     }
 
-    // Username y password (sin cifrar)
     public void setUsername(String username) {
         preferences.edit().putString(KEY_USERNAME, username).apply();
     }
@@ -70,7 +62,6 @@ public class AppPreferences {
         preferences.edit().remove(KEY_USERNAME).remove(KEY_PASSWORD).apply();
     }
 
-    // Login status
     public void setLoggedIn(boolean loggedIn) {
         preferences.edit().putBoolean(KEY_LOGGED_IN, loggedIn).apply();
     }
@@ -78,8 +69,6 @@ public class AppPreferences {
     public boolean isLoggedIn() {
         return preferences.getBoolean(KEY_LOGGED_IN, false);
     }
-
-    // Player Id
     public void setPlayerId(int playerId) {
         preferences.edit().putInt(KEY_PLAYER_ID, playerId).apply();
     }
@@ -88,7 +77,6 @@ public class AppPreferences {
         return preferences.getInt(KEY_PLAYER_ID, -1);
     }
 
-    // Admin flag
     public void setIsAdmin(boolean isAdmin) {
         preferences.edit().putBoolean(KEY_IS_ADMIN, isAdmin).apply();
     }

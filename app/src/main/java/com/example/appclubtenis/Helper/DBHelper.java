@@ -30,9 +30,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CONFIG_TABLE);
-
-//        db.execSQL("INSERT INTO " + TABLE_CONFIG + " (url, username, password) VALUES " +
-//                "('http://10.0.2.2:8080/', '', '')");
     }
 
     @Override

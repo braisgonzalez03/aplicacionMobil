@@ -10,7 +10,7 @@ import android.os.LocaleList;
 import java.util.Locale;
 
 public class LanguageLocale {
-
+//Permitimos cambiar el idioma en tiempo de ejecución
     public static Context setLocale(Context context, String language) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return updateResources(context, language);
